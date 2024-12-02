@@ -16,7 +16,7 @@ const update = async (req: Request, res: Response) => {
   res.send("Update");
 };
 
-const deleteOne = async (req: Request, res: Response) => {
+const remove = async (req: Request, res: Response) => {
   res.send("Delete");
 };
 
@@ -25,5 +25,5 @@ export default {
   getOne,
   create,
   update,
-  deleteOne,
+  remove,
 };
