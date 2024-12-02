@@ -1,8 +1,8 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 import PostController from "./post/posts.controller";
-// import UserController from "./user/users.controller";
 import LoggerService from "./middleware/logger.middleware";
+import UsersController from "./user/users.controller";
 
 const app = express();
 const port = 8000;
@@ -20,7 +20,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/posts", PostController);
-// app.use("/users", UserController);
+app.use("/users", UsersController);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
