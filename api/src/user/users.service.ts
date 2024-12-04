@@ -3,10 +3,10 @@ import connection from "../config/databse.config";
 
 const getAll = async (req: Request, res: Response) => {
   connection.query(
-    "SELECT * FROM users ORDER BY created_at DESC",
+    "SELECT * FROM user ORDER BY created_at DESC",
     (error, results) => {
       if (error) {
-        res.status(500).send({ error: "Error while fetching users" });
+        res.status(500).send({ error: "Error while fetching user" });
         return;
       }
       res.status(200).send(results.rows);
@@ -16,7 +16,7 @@ const getAll = async (req: Request, res: Response) => {
 
 const getOne = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const sql = "SELECT * FROM users WHERE id = $1";
+  const sql = "SELECT * FROM user WHERE id = $1";
   const values = [id];
 
   connection.query(sql, values, (error, results) => {
@@ -45,7 +45,7 @@ const create = async (req: Request, res: Response) => {
   }
 
   const sql =
-    "INSERT INTO users (username, password, email, created_at) VALUES ($1, $2, $3, NOW()) RETURNING id";
+    "INSERT INTO user (username, password, email, created_at) VALUES ($1, $2, $3, NOW()) RETURNING id";
   const values = [username, password, email];
 
   connection.query(sql, values, (error, results) => {
@@ -71,9 +71,9 @@ const update = async (req: Request, res: Response) => {
     return;
   }
 
-  const sqlSelect = "SELECT * FROM users WHERE id = $1";
+  const sqlSelect = "SELECT * FROM user WHERE id = $1";
   const sqlUpdate =
-    "UPDATE users SET username = $1, password = $2, email = $3 WHERE id = $4 RETURNING *";
+    "UPDATE user SET username = $1, password = $2, email = $3 WHERE id = $4 RETURNING *";
 
   connection.query(sqlSelect, [id], (error, results) => {
     if (error) {
@@ -112,8 +112,8 @@ const update = async (req: Request, res: Response) => {
 const remove = async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  const sqlSelect = "SELECT * FROM users WHERE id = $1";
-  const sqlDelete = "DELETE FROM users WHERE id = $1 RETURNING *";
+  const sqlSelect = "SELECT * FROM user WHERE id = $1";
+  const sqlDelete = "DELETE FROM user WHERE id = $1 RETURNING *";
 
   connection.query(sqlSelect, [id], (error, results) => {
     if (error) {

@@ -2,12 +2,12 @@ import { Request, Response } from "express";
 import connection from "../config/databse.config";
 
 const getAll = async (req: Request, res: Response) => {
-  const sql = "SELECT * FROM posts ORDER BY created_at DESC";
+  const sql = "SELECT * FROM post ORDER BY created_at DESC";
 
   connection.query(sql, (error, results) => {
     if (error) {
-      console.error("Error while fetching posts:", error);
-      res.status(500).send({ error: "Error while fetching posts" });
+      console.error("Error while fetching post:", error);
+      res.status(500).send({ error: "Error while fetching post" });
       return;
     }
 
@@ -18,7 +18,7 @@ const getAll = async (req: Request, res: Response) => {
 const getOne = async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  const sql = "SELECT * FROM posts WHERE id = $1";
+  const sql = "SELECT * FROM post WHERE id = $1";
   const values = [id];
 
   connection.query(sql, values, (error, results) => {
@@ -48,7 +48,7 @@ const create = async (req: Request, res: Response) => {
   }
 
   const sql =
-    "INSERT INTO posts (user_id, title, content, created_at, image_path) VALUES ($1, $2, $3, NOW(), $4) RETURNING *";
+    "INSERT INTO post (user_id, title, content, created_at, image_path) VALUES ($1, $2, $3, NOW(), $4) RETURNING *";
   const values = [user_id, title, content, image_path || null];
 
   connection.query(sql, values, (error, results) => {
@@ -74,9 +74,9 @@ const update = async (req: Request, res: Response) => {
     return;
   }
 
-  const sqlSelect = "SELECT * FROM posts WHERE id = $1";
+  const sqlSelect = "SELECT * FROM post WHERE id = $1";
   const sqlUpdate =
-    "UPDATE posts SET title = $1, content = $2, image_path = $3 WHERE id = $4 RETURNING *";
+    "UPDATE post SET title = $1, content = $2, image_path = $3 WHERE id = $4 RETURNING *";
 
   connection.query(sqlSelect, [id], (error, results) => {
     if (error) {
@@ -116,8 +116,8 @@ const update = async (req: Request, res: Response) => {
 const remove = async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  const sqlSelect = "SELECT * FROM posts WHERE id = $1";
-  const sqlDelete = "DELETE FROM posts WHERE id = $1 RETURNING *";
+  const sqlSelect = "SELECT * FROM post WHERE id = $1";
+  const sqlDelete = "DELETE FROM post WHERE id = $1 RETURNING *";
 
   connection.query(sqlSelect, [id], (error, results) => {
     if (error) {

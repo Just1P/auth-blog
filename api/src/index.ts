@@ -15,12 +15,17 @@ app.use(
 );
 app.use(LoggerService);
 
+app.use(function (req, res, next) {
+  console.log("Custom middleware");
+  next();
+});
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello !");
 });
 
 app.use("/posts", PostController);
 app.use("/users", UsersController);
+// app.use;
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
