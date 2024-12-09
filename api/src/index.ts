@@ -1,31 +1,46 @@
-import express, { Request, Response } from "express";
+import express from "express";
+import UserController from "./user/user.controller";
+import logger from "./middleware/logger.middleware";
+import AuthController from "./auth/auth.controller";
+import authMiddleware from "./middleware/auth.middleware";
 import cors from "cors";
-import PostController from "./post/posts.controller";
-import LoggerService from "./middleware/logger.middleware";
-import UsersController from "./user/users.controller";
+import { IUser } from "./user/user.types";
 
 const app = express();
 const port = 8000;
 
+declare global {
+  namespace Express {
+    interface Request {
+      user?: IUser;
+    }
+  }
+}
+
 app.use(express.json());
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-  })
-);
-app.use(LoggerService);
+app.use(cors());
 
-app.use(function (req, res, next) {
-  console.log("Custom middleware");
-  next();
-});
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello !");
+app.use(logger);
+
+app.get("/", (req, res) => {
+  res.send("Hello World!");
 });
 
-app.use("/posts", PostController);
-app.use("/users", UsersController);
-// app.use;
+app.use("/auth", AuthController);
+app.use("/users", UserController);
+
+app.get("/private", authMiddleware, (req, res) => {
+  console.log("private route req.user : ", req.user);
+  res.send("Private route");
+});
+
+app.post("/travel", authMiddleware, (req, res) => {
+  // const createdTravel = {
+  //   name: req.body.name,
+  //   city: req.body.city,
+  //   userId: req.user.id,
+  // };
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
