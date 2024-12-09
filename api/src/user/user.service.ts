@@ -62,11 +62,71 @@ const create = async (userDTO: IUserDTO) => {
 };
 
 const update = async (req: Request, res: Response) => {
-  res.send("update user");
+  const { id } = req.params;
+  const { username, password } = req.body;
+
+  if (!id || (!username && !password)) {
+    return res.status(400).json({ message: "Invalid input data." });
+  }
+
+  const fieldsToUpdate = [];
+  const values: (string | number)[] = [];
+  let query = "UPDATE users SET ";
+
+  if (username) {
+    fieldsToUpdate.push("username = $1");
+    values.push(username);
+  }
+
+  if (password) {
+    fieldsToUpdate.push("password = $" + (values.length + 1));
+    values.push(password);
+  }
+
+  query += fieldsToUpdate.join(", ");
+  query += " WHERE id = $" + (values.length + 1);
+  values.push(Number(id));
+
+  try {
+    const result = await pool.query(query, values);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    res.status(200).json({ message: "User updated successfully." });
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res
+      .status(500)
+      .json({ message: "An error occurred while updating the user." });
+  }
 };
 
 const remove = async (req: Request, res: Response) => {
-  res.send("remove user");
+  const { id } = req.params;
+
+  if (!id) {
+    return res.status(400).json({ message: "Invalid input data." });
+  }
+
+  const query = "DELETE FROM users WHERE id = $1";
+  const values = [Number(id)];
+
+  try {
+    const result = await pool.query(query, values);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    res.status(200).json({ message: "User removed successfully." });
+  } catch (error) {
+    console.error("Error removing user:", error);
+    res
+      .status(500)
+      .json({ message: "An error occurred while removing the user." });
+  }
 };
 
 export default {

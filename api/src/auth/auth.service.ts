@@ -7,7 +7,6 @@ dotenv.config();
 const JWT_SECRET = process.env.JWT_SECRET as string;
 
 const signin = async (userDTO: IUserDTO) => {
-  // Check if user exists
   const user = await userService.getOneByUsername(userDTO.username);
 
   if (!user) {

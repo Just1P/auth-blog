@@ -5,6 +5,7 @@ import AuthController from "./auth/auth.controller";
 import authMiddleware from "./middleware/auth.middleware";
 import cors from "cors";
 import { IUser } from "./user/user.types";
+import PostsController from "./post/posts.controller";
 
 const app = express();
 const port = 8000;
@@ -28,18 +29,11 @@ app.get("/", (req, res) => {
 
 app.use("/auth", AuthController);
 app.use("/users", UserController);
+app.use("/posts", PostsController);
 
 app.get("/private", authMiddleware, (req, res) => {
   console.log("private route req.user : ", req.user);
   res.send("Private route");
-});
-
-app.post("/travel", authMiddleware, (req, res) => {
-  // const createdTravel = {
-  //   name: req.body.name,
-  //   city: req.body.city,
-  //   userId: req.user.id,
-  // };
 });
 
 app.listen(port, () => {
