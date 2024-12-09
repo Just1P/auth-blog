@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { login, signup } from "../../../api/src/user";
+import { signin } from "../services/auth.service";
 
 function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -11,16 +11,14 @@ function AuthPage() {
     e.preventDefault();
     setMessage("");
 
+    const payload = { username, password };
+
     try {
-      if (isLogin) {
-        const response = await login({ username, password });
-        setMessage(`Login successful: Welcome ${response.username}`);
-      } else {
-        const response = await signup({ username, password });
-        setMessage(`Signup successful: Welcome ${response.username}`);
-      }
-    } catch (error) {
-      setMessage("Error: " + error.message);
+      const token = await signin(payload); // Récupère le token
+      localStorage.setItem("access_token", token); // Stocke le token
+      setMessage("Login successful!");
+    } catch (error: any) {
+      setMessage(`Error: ${error.message}`);
     }
   };
 
