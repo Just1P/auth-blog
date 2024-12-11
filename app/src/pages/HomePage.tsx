@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getPosts, deletePost } from "../services/posts.service";
+import { getPosts } from "../services/posts.service";
 import { PostType } from "../types/post.type";
 
 function HomePage() {
@@ -14,30 +14,29 @@ function HomePage() {
         const fetchedPosts = await getPosts();
         setPosts(fetchedPosts);
       } catch (err) {
-        console.error("Error occurred:", err);
-        setError("Failed to fetch posts. Please try again.");
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("Failed to fetch posts. Please try again.");
+        }
       }
     };
 
     fetchPosts();
   }, []);
 
-  const handleDelete = async (id: number) => {
-    if (window.confirm("Are you sure you want to delete this post?")) {
-      try {
-        await deletePost(id);
-        setPosts(posts.filter((post) => post.id !== id));
-      } catch (err) {
-        const error = err as Error;
-        console.error("Error occurred:", error.message);
-        setError(error.message);
-      }
-    }
-  };
-
   return (
     <div className="home-page">
       <h1>Posts</h1>
+      <button
+        onClick={() => navigate("/create-post")}
+        className="create-button"
+      >
+        Create New Post
+      </button>
+      <button onClick={() => navigate("/profile")} className="profile-button">
+        My Profile
+      </button>
       {error && <p style={{ color: "red" }}>{error}</p>}
       {posts.length === 0 ? (
         <p>No posts available.</p>
@@ -45,12 +44,11 @@ function HomePage() {
         <ul>
           {posts.map((post) => (
             <li key={post.id}>
+              <p>
+                <strong>Created by:</strong> {post.creator_name}
+              </p>
               <h2>{post.title}</h2>
               <p>{post.content}</p>
-              <button onClick={() => navigate(`/edit-post/${post.id}`)}>
-                Edit
-              </button>
-              <button onClick={() => handleDelete(post.id)}>Delete</button>
             </li>
           ))}
         </ul>

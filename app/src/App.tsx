@@ -4,6 +4,7 @@ import CreatePostPage from "./pages/CreatePostPage";
 import EditPostPage from "./pages/EditPostPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AuthPage from "./pages/AuthPage";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   return (
@@ -27,6 +28,14 @@ function App() {
           }
         />
         <Route path="/auth" element={<AuthPage />} />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
   );

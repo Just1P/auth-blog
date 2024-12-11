@@ -2,7 +2,14 @@ import { Request, Response } from "express";
 import connection from "../config/databse.config";
 
 const getAll = async (req: Request, res: Response) => {
-  const sql = "SELECT * FROM posts ORDER BY created_at DESC";
+  const sql = `
+    SELECT 
+      posts.*, 
+      users.username AS creator_name 
+    FROM posts
+    JOIN users ON posts.user_id = users.id
+    ORDER BY posts.created_at DESC
+  `;
 
   connection.query(sql, (error, results) => {
     if (error) {
@@ -18,18 +25,25 @@ const getAll = async (req: Request, res: Response) => {
 const getOne = async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  const sql = "SELECT * FROM posts WHERE id = $1";
+  const sql = `
+    SELECT 
+      posts.*, 
+      users.username AS creator_name 
+    FROM posts
+    JOIN users ON posts.user_id = users.id
+    WHERE posts.id = $1
+  `;
   const values = [id];
 
   connection.query(sql, values, (error, results) => {
     if (error) {
-      console.error("Error while fetching posts:", error);
-      res.status(500).send({ error: "Error while fetching posts" });
+      console.error("Error while fetching post:", error);
+      res.status(500).send({ error: "Error while fetching post" });
       return;
     }
 
-    if (Array.isArray(results.rows) && results.rows.length === 0) {
-      res.status(404).send({ error: "posts not found" });
+    if (results.rows.length === 0) {
+      res.status(404).send({ error: "Post not found" });
       return;
     }
 
@@ -152,10 +166,38 @@ const remove = async (req: Request, res: Response) => {
   }
 };
 
+const getPostsByUser = async (req: Request, res: Response) => {
+  const user = req.user;
+
+  if (!user || !user.id) {
+    return res.status(403).json({ error: "Unauthorized" });
+  }
+
+  const sql = `
+    SELECT 
+      posts.*, 
+      users.username AS creator_name 
+    FROM posts
+    JOIN users ON posts.user_id = users.id
+    WHERE posts.user_id = $1
+    ORDER BY posts.created_at DESC
+  `;
+  const values = [user.id];
+
+  try {
+    const results = await connection.query(sql, values);
+    res.status(200).json(results.rows);
+  } catch (error) {
+    console.error("Error while fetching user's posts:", error);
+    res.status(500).json({ error: "An error occurred while fetching posts" });
+  }
+};
+
 export default {
   getAll,
   getOne,
   create,
   update,
   remove,
+  getPostsByUser,
 };

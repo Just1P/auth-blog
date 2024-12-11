@@ -7,6 +7,15 @@ const PostsController = Router();
 
 PostsController.use(logger);
 
+PostsController.get("/user-posts", authMiddleware, async (req, res) => {
+  try {
+    await PostsService.getPostsByUser(req, res);
+  } catch (error) {
+    console.error("Error fetching user's posts:", error);
+    res.status(500).send("An error occurred while fetching user's posts.");
+  }
+});
+
 PostsController.get("/", async (req, res) => {
   try {
     await PostsService.getAll(req, res);
@@ -27,8 +36,8 @@ PostsController.get("/:id", async (req, res) => {
 
 PostsController.post("/", authMiddleware, async (req, res) => {
   try {
-    console.log("User making the request:", (req as any).user);
-    const user = (req as any).user;
+    const user = req.user;
+    console.log("User making the request:", user);
 
     await PostsService.create(req, res);
   } catch (error) {
@@ -39,7 +48,7 @@ PostsController.post("/", authMiddleware, async (req, res) => {
 
 PostsController.put("/:id", authMiddleware, async (req, res) => {
   try {
-    const user = (req as any).user;
+    const user = req.user;
     console.log("Updating post for user:", user);
 
     await PostsService.update(req, res);
@@ -51,7 +60,7 @@ PostsController.put("/:id", authMiddleware, async (req, res) => {
 
 PostsController.delete("/:id", authMiddleware, async (req, res) => {
   try {
-    const user = (req as any).user;
+    const user = req.user;
     console.log("Deleting post for user:", user);
 
     await PostsService.remove(req, res);

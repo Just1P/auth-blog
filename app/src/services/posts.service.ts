@@ -96,3 +96,26 @@ export const deletePost = async (id: number): Promise<{ message: string }> => {
 
   return response.json();
 };
+
+export const getPostsByUser = async (): Promise<PostType[]> => {
+  const token = localStorage.getItem("access_token");
+
+  if (!token) {
+    throw new Error("User is not authenticated. Token missing.");
+  }
+
+  const response = await fetch(`${API_BASE_URL}/posts/user-posts`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(
+      errorData?.error || "Failed to fetch user's posts. Please try again."
+    );
+  }
+
+  return response.json();
+};

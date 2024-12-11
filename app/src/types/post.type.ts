@@ -2,6 +2,8 @@ export type PostDTO = {
   title: string;
   content: string;
   imagePath?: string | null;
+  createdAt: string;
+  creator_name: string;
 };
 
 export type PostType = {
@@ -9,4 +11,6 @@ export type PostType = {
   title: string;
   content: string;
   imagePath?: string | null;
+  createdAt: string;
+  creator_name: string;
 };
