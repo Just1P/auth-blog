@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { signin } from "../services/auth.service";
 
 function AuthPage() {
@@ -6,18 +7,23 @@ function AuthPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage("");
 
-    const payload = { username, password };
-
     try {
-      const token = await signin(payload); // Récupère le token
-      localStorage.setItem("access_token", token); // Stocke le token
-      setMessage("Login successful!");
-    } catch (error: any) {
+      const token = await signin(username, password);
+      if (token) {
+        localStorage.setItem("access_token", token);
+        setMessage("Login successful!");
+        navigate("/create-post");
+      } else {
+        setMessage("Login failed!");
+      }
+    } catch (err) {
+      const error = err as Error;
       setMessage(`Error: ${error.message}`);
     }
   };

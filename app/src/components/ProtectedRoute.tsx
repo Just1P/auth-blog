@@ -1,27 +1,13 @@
-import { createContext, useContext, useState } from "react";
+import { Navigate } from "react-router-dom";
 
-const AuthContext = createContext();
+const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
+  const token = localStorage.getItem("access_token");
 
-export const AuthProvider = ({ children }) => {
-  const [authToken, setAuthToken] = useState(
-    localStorage.getItem("access_token")
-  );
+  if (!token) {
+    return <Navigate to="/auth" />;
+  }
 
-  const signin = (token) => {
-    setAuthToken(token);
-    localStorage.setItem("access_token", token);
-  };
-
-  const signout = () => {
-    setAuthToken(null);
-    localStorage.removeItem("access_token");
-  };
-
-  return (
-    <AuthContext.Provider value={{ authToken, signin, signout }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return children;
 };
 
-export const useAuth = () => useContext(AuthContext);
+export default ProtectedRoute;

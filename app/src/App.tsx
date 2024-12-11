@@ -1,8 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import CreatePostPage from "./pages/CreatePostPage";
-import AuthPage from "./pages/AuthPage";
+import EditPostPage from "./pages/EditPostPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AuthPage from "./pages/AuthPage";
 
 function App() {
   return (
@@ -14,6 +15,14 @@ function App() {
           element={
             <ProtectedRoute>
               <CreatePostPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/edit-post/:id"
+          element={
+            <ProtectedRoute>
+              <EditPostPage />
             </ProtectedRoute>
           }
         />

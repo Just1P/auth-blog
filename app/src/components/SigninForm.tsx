@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { signin } from "../services/auth.service"; // Chemin du fichier des fonctions fetch
+import { signin } from "../services/auth.service";
 
 const SigninForm = () => {
   const [username, setUsername] = useState("");
@@ -17,7 +17,6 @@ const SigninForm = () => {
     }
 
     alert("Signed in successfully!");
-    // Redirige l'utilisateur ou effectue d'autres actions
   };
 
   return (

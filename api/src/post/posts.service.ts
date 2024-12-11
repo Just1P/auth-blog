@@ -39,7 +39,7 @@ const getOne = async (req: Request, res: Response) => {
 
 const create = async (req: Request, res: Response) => {
   const { title, content, image_path } = req.body;
-  const user = (req as any).user; // Récupérer l'utilisateur connecté
+  const user = (req as any).user;
 
   if (!user || !user.id) {
     return res.status(403).send({ error: "Unauthorized" });
@@ -63,40 +63,43 @@ const create = async (req: Request, res: Response) => {
   }
 };
 
-const update = async (req: Request, res: Response, userId: number) => {
+const update = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { title, content, image_path } = req.body;
+  const user = (req as any).user;
+
+  if (!user || !user.id) {
+    return res.status(403).send({ error: "Unauthorized" });
+  }
 
   if (!title && !content && !image_path) {
     return res.status(400).send({ error: "No fields to update" });
   }
 
-  // Vérifier si le post existe et appartient à l'utilisateur
   const sqlSelect = "SELECT * FROM posts WHERE id = $1";
-  const result = await connection.query(sqlSelect, [id]);
-
-  if (result.rows.length === 0) {
-    return res.status(404).send({ error: "Post not found" });
-  }
-
-  const post = result.rows[0];
-  if (post.user_id !== userId) {
-    return res
-      .status(403)
-      .send({ error: "You are not the owner of this post" });
-  }
-
-  // Mise à jour du post
-  const sqlUpdate =
-    "UPDATE posts SET title = $1, content = $2, image_path = $3 WHERE id = $4 RETURNING *";
-  const valuesUpdate = [
-    title || post.title,
-    content || post.content,
-    image_path || post.image_path,
-    id,
-  ];
-
   try {
+    const result = await connection.query(sqlSelect, [id]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).send({ error: "Post not found" });
+    }
+
+    const post = result.rows[0];
+    if (post.user_id !== user.id) {
+      return res
+        .status(403)
+        .send({ error: "You are not the owner of this post" });
+    }
+
+    const sqlUpdate =
+      "UPDATE posts SET title = $1, content = $2, image_path = $3 WHERE id = $4 RETURNING *";
+    const valuesUpdate = [
+      title || post.title,
+      content || post.content,
+      image_path || post.image_path,
+      id,
+    ];
+
     const updateResult = await connection.query(sqlUpdate, valuesUpdate);
 
     res.status(200).send({
@@ -111,27 +114,30 @@ const update = async (req: Request, res: Response, userId: number) => {
   }
 };
 
-const remove = async (req: Request, res: Response, userId: number) => {
+const remove = async (req: Request, res: Response) => {
   const { id } = req.params;
+  const user = (req as any).user;
 
-  // Vérifier si le post existe et appartient à l'utilisateur
+  if (!user || !user.id) {
+    return res.status(403).send({ error: "Unauthorized" });
+  }
+
   const sqlSelect = "SELECT * FROM posts WHERE id = $1";
-  const result = await connection.query(sqlSelect, [id]);
-
-  if (result.rows.length === 0) {
-    return res.status(404).send({ error: "Post not found" });
-  }
-
-  const post = result.rows[0];
-  if (post.user_id !== userId) {
-    return res
-      .status(403)
-      .send({ error: "You are not the owner of this post" });
-  }
-
-  // Supprimer le post
-  const sqlDelete = "DELETE FROM posts WHERE id = $1 RETURNING *";
   try {
+    const result = await connection.query(sqlSelect, [id]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).send({ error: "Post not found" });
+    }
+
+    const post = result.rows[0];
+    if (post.user_id !== user.id) {
+      return res
+        .status(403)
+        .send({ error: "You are not the owner of this post" });
+    }
+
+    const sqlDelete = "DELETE FROM posts WHERE id = $1 RETURNING *";
     const deleteResult = await connection.query(sqlDelete, [id]);
 
     res.status(200).send({

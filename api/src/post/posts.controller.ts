@@ -27,7 +27,7 @@ PostsController.get("/:id", async (req, res) => {
 
 PostsController.post("/", authMiddleware, async (req, res) => {
   try {
-    console.log("User making the request:", (req as any).user); // Debug
+    console.log("User making the request:", (req as any).user);
     const user = (req as any).user;
 
     await PostsService.create(req, res);
@@ -42,7 +42,7 @@ PostsController.put("/:id", authMiddleware, async (req, res) => {
     const user = (req as any).user;
     console.log("Updating post for user:", user);
 
-    await PostsService.update(req, res, user.id);
+    await PostsService.update(req, res);
   } catch (error) {
     console.error("Error updating post:", error);
     res.status(500).send("An error occurred while updating the post.");
@@ -54,7 +54,7 @@ PostsController.delete("/:id", authMiddleware, async (req, res) => {
     const user = (req as any).user;
     console.log("Deleting post for user:", user);
 
-    await PostsService.remove(req, res, user.id);
+    await PostsService.remove(req, res);
   } catch (error) {
     console.error("Error deleting post:", error);
     res.status(500).send("An error occurred while deleting the post.");

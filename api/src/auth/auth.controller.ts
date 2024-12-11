@@ -4,14 +4,14 @@ import AuthService from "./auth.service";
 const AuthController = Router();
 
 AuthController.post("/signin", async (req: Request, res: Response) => {
-  console.log("Request body:", req.body); // Log des identifiants envoyés
+  console.log("Request body:", req.body);
   const { username, password } = req.body;
 
   const userDTO = { username, password };
   const access_token = await AuthService.signin(userDTO);
 
   if (access_token) {
-    console.log("Token generated:", access_token); // Log du token généré
+    console.log("Token generated:", access_token);
     res.status(200).send({ access_token });
   } else {
     console.error("Invalid credentials");
