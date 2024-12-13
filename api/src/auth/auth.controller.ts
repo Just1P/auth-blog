@@ -19,16 +19,33 @@ AuthController.post("/signin", async (req: Request, res: Response) => {
   }
 });
 AuthController.post("/signup", async (req: Request, res: Response) => {
-  const { username, password } = req.body;
-  const userDTO = { username, password };
+  try {
+    const { username, password } = req.body;
+    const userDTO = { username, password };
 
-  const result = await AuthService.signup(userDTO);
+    const result = await AuthService.signup(userDTO);
 
-  if (result) {
-    res.status(201).send({ message: "User created" });
-  } else {
-    res.status(400).send({ message: "User not created" });
+    if (result) {
+      res.status(201).send({ message: "User created successfully" });
+    }
+  } catch (error) {
+    // Vérifiez si `error` est une instance d'Error
+    if (error instanceof Error) {
+      console.error("Signup error:", error.message);
+
+      if (error.message === "Username already exists") {
+        res.status(400).send({ message: error.message });
+      } else {
+        res.status(500).send({ message: "An error occurred during signup" });
+      }
+    } else {
+      // Cas où `error` n'est pas une instance d'Error
+      console.error("Unexpected error:", error);
+      res.status(500).send({ message: "An unknown error occurred" });
+    }
   }
 });
+
+
 
 export default AuthController;

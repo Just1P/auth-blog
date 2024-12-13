@@ -35,3 +35,29 @@ export const signin = async (
     return null;
   }
 };
+
+export const signup = async (
+  username: string,
+  password: string
+): Promise<boolean> => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/auth/signup`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username, password }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      console.error("Signup error:", error.message || "Unknown error");
+      return false;
+    }
+
+    return true; // Retourne true si la création a réussi
+  } catch (error) {
+    console.error("Signup error:", error);
+    return false;
+  }
+};

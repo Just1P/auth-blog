@@ -8,7 +8,8 @@ import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   return (
-    <Router>
+    <div className="sans">
+      <Router>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route
@@ -28,6 +29,7 @@ function App() {
           }
         />
         <Route path="/auth" element={<AuthPage />} />
+        
         <Route
           path="/profile"
           element={
@@ -38,6 +40,8 @@ function App() {
         />
       </Routes>
     </Router>
+    </div>
+    
   );
 }
 

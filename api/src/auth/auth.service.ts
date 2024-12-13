@@ -28,8 +28,23 @@ const signin = async (userDTO: IUserDTO) => {
   return access_token;
 };
 
-const signup = async (userDTO: IUserDTO) => {
-  return userService.create(userDTO);
+
+export const signup = async (userDTO: IUserDTO): Promise<boolean> => {
+  const { username, password } = userDTO;
+
+  const existingUser = await userService.getOneByUsername(username);
+  if (existingUser) {
+    throw new Error("Username already exists");
+  }
+
+
+  // Création de l'utilisateur
+  const createdUser = await userService.create({
+    username,
+    password
+  });
+
+  return !!createdUser; 
 };
 
 export default {
