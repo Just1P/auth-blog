@@ -42,12 +42,14 @@ function CreatePostPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-white px-4">
       <div className="w-full max-w-2xl p-8">
         <h1 className="text-3xl font-semibold text-center mb-6">Create a New Post</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="title" className="block text-sm font-medium mb-2">Title</label>
+            <label htmlFor="title" className="block text-sm font-medium mb-2">
+              Title
+            </label>
             <input
               id="title"
               type="text"
@@ -59,7 +61,9 @@ function CreatePostPage() {
             />
           </div>
           <div>
-            <label htmlFor="content" className="block text-sm font-medium mb-2">Content</label>
+            <label htmlFor="content" className="block text-sm font-medium mb-2">
+              Content
+            </label>
             <textarea
               id="content"
               value={content}
@@ -70,7 +74,9 @@ function CreatePostPage() {
             />
           </div>
           <div>
-            <label htmlFor="imagePath" className="block text-sm font-medium mb-2">Image Path</label>
+            <label htmlFor="imagePath" className="block text-sm font-medium mb-2">
+              Image Path
+            </label>
             <input
               id="imagePath"
               type="text"
@@ -84,11 +90,62 @@ function CreatePostPage() {
             type="submit"
             className="w-full py-3 bg-black text-white rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black"
           >
-            {isLoading ? 'Creating...' : 'Create Post'}
+            {isLoading ? "Creating..." : "Create Post"}
           </button>
         </form>
         {message && <p className="text-center mt-6 text-sm text-green-500">{message}</p>}
         {error && <p className="text-center mt-6 text-sm text-red-500">{error}</p>}
+
+        {/* Navigation buttons */}
+        <div className="flex justify-between mt-8">
+          {/* Button to Home */}
+          <button
+            onClick={() => navigate("/")}
+            className="flex items-center text-gray-600 hover:text-black transition"
+          >
+            <span className="mr-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+            </span>
+            Go to Home
+          </button>
+
+          {/* Button to Profile */}
+          <button
+            onClick={() => navigate("/profile")}
+            className="flex items-center text-gray-600 hover:text-black transition"
+          >
+            Go to Profile
+            <span className="ml-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </span>
+          </button>
+        </div>
       </div>
     </div>
   );
