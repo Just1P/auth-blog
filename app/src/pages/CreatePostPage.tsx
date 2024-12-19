@@ -35,7 +35,7 @@ function CreatePostPage() {
       setIsLoading(false);
       navigate("/");
     } catch (err) {
-      console.error("Error occurred:", err);
+      console.error("Error occ.rred:", err);
       setIsLoading(false);
       setError("Failed to create post. Please try again.");
     }
@@ -44,7 +44,9 @@ function CreatePostPage() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-white px-4">
       <div className="w-full max-w-2xl p-8">
-        <h1 className="text-3xl font-semibold text-center mb-6">Create a New Post</h1>
+        <h1 className="text-3xl font-semibold text-center mb-6">
+          Create a New Post
+        </h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="title" className="block text-sm font-medium mb-2">
@@ -74,7 +76,10 @@ function CreatePostPage() {
             />
           </div>
           <div>
-            <label htmlFor="imagePath" className="block text-sm font-medium mb-2">
+            <label
+              htmlFor="imagePath"
+              className="block text-sm font-medium mb-2"
+            >
               Image Path
             </label>
             <input
@@ -93,8 +98,12 @@ function CreatePostPage() {
             {isLoading ? "Creating..." : "Create Post"}
           </button>
         </form>
-        {message && <p className="text-center mt-6 text-sm text-green-500">{message}</p>}
-        {error && <p className="text-center mt-6 text-sm text-red-500">{error}</p>}
+        {message && (
+          <p className="text-center mt-6 text-sm text-green-500">{message}</p>
+        )}
+        {error && (
+          <p className="text-center mt-6 text-sm text-red-500">{error}</p>
+        )}
 
         {/* Navigation buttons */}
         <div className="flex justify-between mt-8">

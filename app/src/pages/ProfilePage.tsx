@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { getPostsByUser } from "../services/posts.service";
 import { PostType } from "../types/post.type";
 import { useNavigate } from "react-router-dom";
+import { FaEdit, FaTrashAlt } from "react-icons/fa"; // Icons for edit and delete
+import { deletePost } from "../services/posts.service";
 
 const ProfilePage = () => {
   const [posts, setPosts] = useState<PostType[]>([]);
@@ -21,6 +23,21 @@ const ProfilePage = () => {
 
     fetchUserPosts();
   }, []);
+
+  const handleDelete = async (id: number) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this post?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+      await deletePost(id);
+      setPosts(posts.filter((post) => post.id !== id)); // Update state after deletion
+    } catch (error: any) {
+      console.error("Error deleting post:", error);
+      setError(error.message);
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white">
@@ -50,8 +67,18 @@ const ProfilePage = () => {
                   Created at: {new Date(post.created_at).toLocaleDateString()}
                 </p>
                 <div className="flex space-x-4">
-                  <button className="text-gray-500 hover:text-gray-700 focus:outline-none"></button>
-                  <button className="text-red-500 hover:text-red-700 focus:outline-none"></button>
+                  <button
+                    onClick={() => navigate(`/edit-post/${post.id}`)}
+                    className="flex items-center text-blue-500 hover:text-blue-700 focus:outline-none"
+                  >
+                    <FaEdit className="mr-2" /> Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(post.id)}
+                    className="flex items-center text-red-500 hover:text-red-700 focus:outline-none"
+                  >
+                    <FaTrashAlt className="mr-2" /> Delete
+                  </button>
                 </div>
               </li>
             ))}
