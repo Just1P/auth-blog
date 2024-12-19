@@ -8,7 +8,7 @@ function EditPostPage() {
   const { id } = useParams<{ id: string }>();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [imagePath, setImagePath] = useState("");
+  const [image_path, set_image_path] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -20,7 +20,7 @@ function EditPostPage() {
         const fetchedPost = await getPostById(Number(id));
         setTitle(fetchedPost.title);
         setContent(fetchedPost.content);
-        setImagePath(fetchedPost.imagePath || "");
+        set_image_path(fetchedPost.image_path || "");
       } catch {
         setError("Failed to load post. Please try again.");
       }
@@ -42,7 +42,7 @@ function EditPostPage() {
     const updatedPost: PostDTO = {
       title: title.trim(),
       content: content.trim(),
-      imagePath: imagePath.trim() || null,
+      image_path: image_path.trim() || null,
     };
 
     try {
@@ -92,16 +92,16 @@ function EditPostPage() {
           </div>
           <div>
             <label
-              htmlFor="imagePath"
+              htmlFor="image_path"
               className="block text-sm font-medium mb-2"
             >
               Image Path
             </label>
             <input
-              id="imagePath"
+              id="image_path"
               type="text"
-              value={imagePath}
-              onChange={(e) => setImagePath(e.target.value)}
+              value={image_path}
+              onChange={(e) => set_image_path(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
               placeholder="Enter the image path"
             />

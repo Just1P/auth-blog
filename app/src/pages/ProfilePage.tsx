@@ -60,7 +60,6 @@ const ProfilePage = () => {
               <li
                 key={post.id}
                 className="bg-gray-100 p-6 rounded-lg shadow-md cursor-pointer"
-                onClick={() => navigate(`/post/${post.id}`)}
               >
                 <h2 className="text-xl font-semibold mb-2">{post.title}</h2>
                 <p className="text-gray-700 mb-4">{post.content}</p>
@@ -80,6 +79,12 @@ const ProfilePage = () => {
                     className="flex items-center text-red-500 hover:text-red-700 focus:outline-none"
                   >
                     <FaTrashAlt className="mr-2" /> Delete
+                  </button>
+                  <button
+                    onClick={() => navigate(`/post/${post.id}`)}
+                    className="flex items-center text-blue-500 hover:text-blue-700 focus:outline-none"
+                  >
+                    View Details
                   </button>
                 </div>
               </li>

@@ -45,9 +45,9 @@ const SinglePostPage = () => {
     <div className="min-h-screen flex items-center justify-center bg-white px-4">
       <div className="w-full max-w-2xl p-8 bg-gray-100 rounded-lg shadow-lg">
         <h1 className="text-3xl font-bold text-center mb-6">{post.title}</h1>
-        {post.imagePath ? (
+        {post.image_path ? (
           <img
-            src={post.imagePath}
+            src={post.image_path}
             alt={post.title}
             className="w-full h-auto rounded-lg mb-6"
           />
