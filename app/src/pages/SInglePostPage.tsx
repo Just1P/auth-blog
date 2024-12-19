@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getPostById } from "../services/posts.service";
 import { PostType } from "../types/post.type";
+import { useEffect, useState } from "react";
 
 const SinglePostPage = () => {
   const { id } = useParams<{ id: string }>();
