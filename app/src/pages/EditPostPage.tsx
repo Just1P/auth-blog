@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getPostById, updatePost } from "../services/posts.service";
-import { PostDTO, PostType } from "../types/post.type";
+import { PostDTO } from "../types/post.type";
+import LogoutButton from "../components/LogoutButton";
 
 function EditPostPage() {
   const { id } = useParams<{ id: string }>();
@@ -20,8 +21,7 @@ function EditPostPage() {
         setTitle(fetchedPost.title);
         setContent(fetchedPost.content);
         setImagePath(fetchedPost.imagePath || "");
-      } catch (err) {
-        console.error("Error occurred:", err);
+      } catch {
         setError("Failed to load post. Please try again.");
       }
     };
@@ -51,15 +51,15 @@ function EditPostPage() {
       setMessage("Post updated successfully!");
       setIsLoading(false);
       navigate("/");
-    } catch (err) {
-      console.error("Error occurred:", err);
+    } catch {
       setIsLoading(false);
       setError("Failed to update post. Please try again.");
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-white px-4">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-white px-4 relative">
+      <LogoutButton />
       <div className="w-full max-w-2xl p-8">
         <h1 className="text-3xl font-semibold text-center mb-6">Edit Post</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -120,10 +120,7 @@ function EditPostPage() {
         {error && (
           <p className="text-center mt-6 text-sm text-red-500">{error}</p>
         )}
-
-        {/* Navigation buttons */}
         <div className="flex justify-between mt-8">
-          {/* Button to Home */}
           <button
             onClick={() => navigate("/")}
             className="flex items-center text-gray-600 hover:text-black transition"
@@ -146,8 +143,6 @@ function EditPostPage() {
             </span>
             Go to Home
           </button>
-
-          {/* Button to Profile */}
           <button
             onClick={() => navigate("/profile")}
             className="flex items-center text-gray-600 hover:text-black transition"

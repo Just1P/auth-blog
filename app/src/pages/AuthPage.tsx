@@ -1,6 +1,6 @@
 import { useState } from "react";
 import SigninForm from "../components/SigninForm";
-import SignupForm from "../components/SignUpForm"
+import SignupForm from "../components/SignUpForm";
 import authImage from "../assets/images/auth-img.jpg";
 
 const AuthPage = () => {
@@ -10,7 +10,6 @@ const AuthPage = () => {
     <div className="flex min-h-screen">
       {/* Left Side */}
       <div className="w-1/2 flex flex-col justify-center ">
-
         {isLogin ? <SigninForm /> : <SignupForm />}
 
         <p className="text-gray-600 mt-6">
@@ -38,13 +37,10 @@ const AuthPage = () => {
         </p>
       </div>
 
-      {/* Right Side */}
       <div
         className="w-1/2 bg-cover bg-center relative "
-        style={{backgroundImage: `url(${authImage})`}}
-      >
-
-      </div>
+        style={{ backgroundImage: `url(${authImage})` }}
+      ></div>
     </div>
   );
 };

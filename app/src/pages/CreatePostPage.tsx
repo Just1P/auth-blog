@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createPost } from "../services/posts.service";
 import { PostDTO } from "../types/post.type";
+import LogoutButton from "../components/LogoutButton";
 
 function CreatePostPage() {
   const [title, setTitle] = useState("");
@@ -34,15 +35,15 @@ function CreatePostPage() {
       setMessage("Post created successfully!");
       setIsLoading(false);
       navigate("/");
-    } catch (err) {
-      console.error("Error occ.rred:", err);
+    } catch {
       setIsLoading(false);
       setError("Failed to create post. Please try again.");
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-white px-4">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-white px-4 relative">
+      <LogoutButton />
       <div className="w-full max-w-2xl p-8">
         <h1 className="text-3xl font-semibold text-center mb-6">
           Create a New Post
@@ -105,9 +106,7 @@ function CreatePostPage() {
           <p className="text-center mt-6 text-sm text-red-500">{error}</p>
         )}
 
-        {/* Navigation buttons */}
         <div className="flex justify-between mt-8">
-          {/* Button to Home */}
           <button
             onClick={() => navigate("/")}
             className="flex items-center text-gray-600 hover:text-black transition"
@@ -131,7 +130,6 @@ function CreatePostPage() {
             Go to Home
           </button>
 
-          {/* Button to Profile */}
           <button
             onClick={() => navigate("/profile")}
             className="flex items-center text-gray-600 hover:text-black transition"

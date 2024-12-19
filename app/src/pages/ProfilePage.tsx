@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { getPostsByUser } from "../services/posts.service";
+import { getPostsByUser, deletePost } from "../services/posts.service";
 import { PostType } from "../types/post.type";
 import { useNavigate } from "react-router-dom";
-import { FaEdit, FaTrashAlt } from "react-icons/fa"; // Icons for edit and delete
-import { deletePost } from "../services/posts.service";
+import { FaEdit, FaTrashAlt } from "react-icons/fa";
+import LogoutButton from "../components/LogoutButton";
 
 const ProfilePage = () => {
   const [posts, setPosts] = useState<PostType[]>([]);
@@ -14,7 +14,6 @@ const ProfilePage = () => {
     const fetchUserPosts = async () => {
       try {
         const userPosts = await getPostsByUser();
-        console.log(userPosts);
         setPosts(userPosts);
       } catch (err: any) {
         setError(err.message);
@@ -32,15 +31,16 @@ const ProfilePage = () => {
 
     try {
       await deletePost(id);
-      setPosts(posts.filter((post) => post.id !== id)); // Update state after deletion
-    } catch (error: any) {
-      console.error("Error deleting post:", error);
-      setError(error.message);
+      setPosts(posts.filter((post) => post.id !== id));
+    } catch (err: any) {
+      console.error("Error deleting post:", err);
+      setError(err.message);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white">
+    <div className="min-h-screen flex items-center justify-center bg-white relative">
+      <LogoutButton />
       <div className="w-full max-w-2xl p-8">
         <h1 className="text-3xl font-semibold text-center mb-6">Your Posts</h1>
         <button

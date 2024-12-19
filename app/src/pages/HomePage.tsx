@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getPosts } from "../services/posts.service";
 import { PostType } from "../types/post.type";
+import LogoutButton from "../components/LogoutButton";
 
 function HomePage() {
   const [posts, setPosts] = useState<PostType[]>([]);
@@ -27,7 +28,8 @@ function HomePage() {
   }, []);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white">
+    <div className="min-h-screen flex items-center justify-center bg-white relative">
+      <LogoutButton />
       <div className="w-full max-w-2xl p-8">
         <h1 className="text-3xl font-semibold text-center mb-6">Posts</h1>
         <button
