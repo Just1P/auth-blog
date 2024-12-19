@@ -59,13 +59,15 @@ const ProfilePage = () => {
             {posts.map((post) => (
               <li
                 key={post.id}
-                className="bg-gray-100 p-6 rounded-lg shadow-md"
+                className="bg-gray-100 p-6 rounded-lg shadow-md cursor-pointer"
+                onClick={() => navigate(`/post/${post.id}`)}
               >
                 <h2 className="text-xl font-semibold mb-2">{post.title}</h2>
                 <p className="text-gray-700 mb-4">{post.content}</p>
                 <p className="text-sm text-gray-500 mb-4">
                   Created at: {new Date(post.created_at).toLocaleDateString()}
                 </p>
+
                 <div className="flex space-x-4">
                   <button
                     onClick={() => navigate(`/edit-post/${post.id}`)}
