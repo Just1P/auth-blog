@@ -17,7 +17,7 @@ const getAll = async (req: Request, res: Response) => {
       res.status(500).send({ error: "Error while fetching posts" });
       return;
     }
-
+    console.log(results.rows);
     res.status(200).send(results.rows);
   });
 };
